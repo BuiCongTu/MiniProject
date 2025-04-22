@@ -25,7 +25,7 @@ namespace Server.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<CartDTO>> AddToCat(CartDTO cartDto)
+        public async Task<ActionResult<CartDTO>> AddToCart(CartDTO cartDto)
         {
             if (!ModelState.IsValid)
             {
@@ -35,34 +35,34 @@ namespace Server.Controllers
             return CreatedAtAction(nameof(GetCartByUser), new { userId = addedItem.UserId }, addedItem);
         }
 
-        // [HttpPut("{id}")]
-        // public async Task<IActionResult> UpdateCartItem(int id, CartDTO cartDto)
-        // {
-        //     if (!ModelState.IsValid)
-        //     {
-        //         return BadRequest(ModelState);
-        //     }
-        //     if (id != cartDto.Id)
-        //     {
-        //         return BadRequest("ID mismatch");
-        //     }
-        //     var updatedItem = await cartService.UpdateAsync(cartDto);
-        //     if (updatedItem == null)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return NoContent();
-        // }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCartItem(int id, CartDTO cartDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            if (id != cartDto.Id)
+            {
+                return BadRequest("ID mismatch");
+            }
+            var updatedItem = await cartService.UpdateCart(cartDto);
+            if (updatedItem == null)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
 
-        // [HttpDelete("{id}")]
-        // public async Task<IActionResult> RemoveCartItem(int id)
-        // {
-        //     var result = await cartService.DeleteAsync(id);
-        //     if (!result)
-        //     {
-        //         return NotFound();
-        //     }
-        //     return NoContent();
-        // }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> RemoveCartItem(int id)
+        {
+            var result = await cartService.DeleteAsync(id);
+            if (!result)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
     }
 }

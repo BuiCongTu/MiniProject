@@ -21,7 +21,7 @@
             <td>@product.Description</td>
             <td>@product.Price</td>
             <td>
-                <form asp-action="AddToCart" method="post">
+                <form asp-action="AddToCart">
                     <input type="hidden" name="productId" value="@product.Id" />
                     <input type="number" name="quantity" value="1" min="1" />
                     <button type="submit" class="btn btn-primary">Add to Cart</button>

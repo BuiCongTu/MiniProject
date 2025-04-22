@@ -62,4 +62,29 @@ public class CartRepository : ICartRepository
         db.Carts.RemoveRange(cartItem);
         await db.SaveChangesAsync();
     }
+
+    public async Task<Cart> UpdateCart(Cart cart)
+    {
+        var existingCart = await db.Carts.FindAsync(cart.Id);
+        if (existingCart is null)
+        {
+            throw new Exception("CartDTO not found");
+        }
+        existingCart.Quantity = cart.Quantity;
+        db.Carts.Update(existingCart);
+        await db.SaveChangesAsync();
+        return existingCart;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var cart = await db.Carts.FindAsync(id);
+        if (cart is null)
+        {
+            return false;
+        }
+        db.Carts.Remove(cart);
+        await db.SaveChangesAsync();
+        return true;
+    }
 }

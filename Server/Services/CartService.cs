@@ -1,4 +1,5 @@
 using Server.DTOs;
+using Server.Models;
 using Server.Repositories;
 
 namespace Server.Services;
@@ -18,23 +19,44 @@ public class CartService : ICartService
             Id = c.Id,
             UserId = c.UserId,
             ProductId = c.ProductId,
-            Quantity = c.Quantity
-            }).ToList();
+            Quantity = c.Quantity,
+            Price = c.Product?.Price.ToString(),
+            ProductName = c.Product?.Name
+        }).ToList();
     }
     
     public async Task<CartDTO> AddToCart(CartDTO cartDto)
     {
-        var cart = new CartDTO()
+        var cart = new Cart()
         {
             UserId = cartDto.UserId,
             ProductId = cartDto.ProductId,
             Quantity = cartDto.Quantity
         };
-        return cart;
+        var addedItem = await cartRepo.AddToCart(cart);
+        return cartDto;
     }
     
     public async Task Payment(string userId)
     {
         await cartRepo.Payment(userId);
+    }
+
+    public async Task<CartDTO> UpdateCart(CartDTO cartDto)
+    {
+        var cart = new Cart()
+        {
+            Id = cartDto.Id,
+            UserId = cartDto.UserId,
+            ProductId = cartDto.ProductId,
+            Quantity = cartDto.Quantity
+        };
+        var updatedItem = await cartRepo.UpdateCart(cart);
+        return cartDto;
+    }
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        return await cartRepo.DeleteAsync(id);
     }
 }

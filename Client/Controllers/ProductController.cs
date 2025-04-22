@@ -1,4 +1,6 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using Client.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,9 +45,15 @@ namespace Client.Controllers
             if (!AddHeader())
                 return RedirectToAction("Login", "Account");
 
+            //get user id from token
+            var token = HttpContext.Session.GetString("AuthToken");
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userId = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
             try
             {
-                var response = await client.PostAsJsonAsync($"CartItem", new { ProductId = productId, Quantity = quantity });
+                var response = await client.PostAsJsonAsync("Cart", new { ProductId = productId, Quantity = quantity, UserId = userId });
 
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("Cart");
@@ -66,9 +74,15 @@ namespace Client.Controllers
             if (!AddHeader())
                 return RedirectToAction("Login", "Account");
 
+            //get user id from token
+            var token = HttpContext.Session.GetString("AuthToken");
+            var handler = new JwtSecurityTokenHandler();
+            var jwtToken = handler.ReadJwtToken(token);
+            var userId = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+
             try
             {
-                var response = await client.GetFromJsonAsync<CartItemViewModel[]>("cart");
+                var response = await client.GetFromJsonAsync<CartItemViewModel[]>("cart/user/" + userId);
                 return View(response ?? new CartItemViewModel[0]);
             }
             catch (Exception ex)
@@ -89,7 +103,7 @@ namespace Client.Controllers
 
             try
             {
-                var response = await client.PutAsJsonAsync($"cart/{cartItemId}", new { Quantity = quantity });
+                var response = await client.PutAsJsonAsync("cart/" + cartItemId, new { Id = cartItemId, Quantity = quantity });
 
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("Cart");
@@ -113,7 +127,7 @@ namespace Client.Controllers
 
             try
             {
-                var response = await client.DeleteAsync($"cart/{cartItemId}");
+                var response = await client.DeleteAsync("cart/" + cartItemId);
 
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("Cart");
