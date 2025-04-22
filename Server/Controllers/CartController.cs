@@ -64,5 +64,13 @@ namespace Server.Controllers
             }
             return NoContent();
         }
+        
+        //payment
+        [HttpPost("checkout/{userId}")]
+        public async Task<IActionResult> Checkout(string userId)
+        {
+            await cartService.Payment(userId);
+            return NoContent();
+        }
     }
 }

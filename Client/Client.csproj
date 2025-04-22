@@ -17,4 +17,8 @@
       <Folder Include="wwwroot\images\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Content Remove="Views\Product\OrderConfirmation.cshtml" />
+    </ItemGroup>
+
 </Project>

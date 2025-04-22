@@ -19,7 +19,7 @@ public class DatabaseDbContext: DbContext
         modelBuilder.Entity<User>().HasData(
             new User()
             {
-                UserId = "u1",
+                UserId = "1",
                 Username = "admin",
                 PasswordHash = "$2a$12$IJffGGP5Y427cT/TWDtbguji1qdzDI2wzl2asCWjqII4A9m27QXsa",
                 Role = "Admin",
@@ -27,7 +27,7 @@ public class DatabaseDbContext: DbContext
             },
             new User()
             {
-                UserId = "u2",
+                UserId = "2",
                 Username = "user1",
                 PasswordHash = "$2a$12$IJffGGP5Y427cT/TWDtbguji1qdzDI2wzl2asCWjqII4A9m27QXsa",
                 Role = "User",
@@ -35,7 +35,7 @@ public class DatabaseDbContext: DbContext
             },
             new User()
             {
-                UserId = "u3",
+                UserId = "3",
                 Username = "user2",
                 // PasswordHash = BCrypt.Net.BCrypt.HashPassword("123"),
                 PasswordHash = "$2a$12$IJffGGP5Y427cT/TWDtbguji1qdzDI2wzl2asCWjqII4A9m27QXsa",

@@ -25,15 +25,27 @@ namespace Client.Controllers
             }
             return false;
         }
-
         public async Task<IActionResult> Index()
         {
-            var options = new System.Text.Json.JsonSerializerOptions
+            try
             {
-                PropertyNameCaseInsensitive = true
-            };
-            var products = await client.GetFromJsonAsync<List<ProductViewModel>>("Product", options);
-            return View(products ?? new List<ProductViewModel>());
+                var options = new System.Text.Json.JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+                var products = await client.GetFromJsonAsync<List<ProductViewModel>>("Product", options);
+                return View(products ?? new List<ProductViewModel>());
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Error fetching products: {ex.Message}");
+                return View(new List<ProductViewModel>());
+            }
+            catch (System.Text.Json.JsonException jsonEx)
+            {
+                Console.WriteLine($"Error deserializing products: {jsonEx.Message}");
+                return View(new List<ProductViewModel>());
+            }
         }
 
         [HttpPost]
@@ -41,20 +53,20 @@ namespace Client.Controllers
         {
             if (HttpContext.Session.GetString("Role") != "User")
                 return RedirectToAction("Login", "Account");
-
+        
             if (!AddHeader())
                 return RedirectToAction("Login", "Account");
-
+        
             //get user id from token
             var token = HttpContext.Session.GetString("AuthToken");
             var handler = new JwtSecurityTokenHandler();
             var jwtToken = handler.ReadJwtToken(token);
             var userId = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
-
+        
             try
             {
                 var response = await client.PostAsJsonAsync("Cart", new { ProductId = productId, Quantity = quantity, UserId = userId });
-
+        
                 if (response.IsSuccessStatusCode)
                     return RedirectToAction("Cart");
                 return BadRequest();
@@ -139,7 +151,7 @@ namespace Client.Controllers
                 return BadRequest();
             }
         }
-
+        
         [HttpPost]
         public async Task<IActionResult> Checkout()
         {
@@ -151,21 +163,24 @@ namespace Client.Controllers
 
             try
             {
-                var response = await client.PostAsync("orders/checkout", null);
-
+                var token = HttpContext.Session.GetString("AuthToken");
+                var handler = new JwtSecurityTokenHandler();
+                var jwtToken = handler.ReadJwtToken(token);
+                var userId = jwtToken.Claims.First(claim => claim.Type == ClaimTypes.NameIdentifier).Value;
+                var response = await client.PostAsync($"Cart/checkout/" + userId, null);
                 if (response.IsSuccessStatusCode)
                 {
-                    var order = await response.Content.ReadFromJsonAsync<OrderViewModel>();
-                    ViewBag.Message = $"Payment successful, Order Id: {order.Id}, Tổng tiền: {order.TotalAmount}";
-                    return View("OrderConfirmation", order);
+                    TempData["SuccessMessage"] = "Checkout successful!";
+                    return RedirectToAction("Cart");
                 }
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error during checkout: {ex.Message}");
+                Console.WriteLine($"Error checking out: {ex.Message}");
                 return BadRequest();
             }
         }
+
     }
 }

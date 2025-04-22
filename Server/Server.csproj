@@ -26,4 +26,14 @@
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.8.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="Migrations\20250417190350_InitialCreate.Designer.cs" />
+      <Compile Remove="Migrations\DatabaseDbContextModelSnapshot.cs" />
+      <Compile Remove="Migrations\20250417190350_InitialCreate.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Images\" />
+    </ItemGroup>
+
 </Project>

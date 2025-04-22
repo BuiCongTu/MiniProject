@@ -10,10 +10,12 @@ namespace Server.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IProductService prodSer;
+        private IWebHostEnvironment env;
 
-        public ProductController(IProductService prodSer)
+        public ProductController(IProductService prodSer, IWebHostEnvironment env)
         {
             this.prodSer = prodSer;
+            this.env = env;
         }
 
         [HttpGet]

@@ -1,5 +1,13 @@
 @model IEnumerable<Client.Models.CartItemViewModel>
-<h2>Your Cart</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<form asp-action="Checkout" method="post">
 <table class="table">
     <thead>
     <tr>
@@ -33,6 +41,6 @@
     }
     </tbody>
 </table>
-<form asp-action="Checkout" method="post">
-    <button type="submit" class="btn btn-success">Checkout</button>
+<button type="submit" class="btn btn-success">Checkout</button>
+
 </form>

@@ -45,7 +45,7 @@ public class CartRepository : ICartRepository
             .Include(c => c.Product)
             .Where(c => c.UserId.Equals(userId))
             .ToListAsync();
-        if (cartItem is null || cartItem.Any())
+        if (cartItem is null)
         {
             throw new Exception("CartDTO is empty");
         }

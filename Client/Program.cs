@@ -10,7 +10,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddDistributedMemoryCache(); // Cần thiết cho session lưu trong bộ nhớ
 builder.Services.AddSession(options =>
 {
-    // Cấu hình thời gian timeout cho session (ví dụ: 20 phút)
+    // Cấu hình thời gian timeout cho session
     options.IdleTimeout = TimeSpan.FromHours(2);
     // Đảm bảo cookie session an toàn
     options.Cookie.HttpOnly = true;
@@ -46,6 +46,4 @@ app.MapControllerRoute(
         name: "default",
         pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
-
-
 app.Run();

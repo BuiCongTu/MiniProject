@@ -23,15 +23,8 @@ namespace Client.Controllers
             }
             return false;
         }
-        public IActionResult Index()
-        {
-            if (HttpContext.Session.GetString("Role") != "Admin")
-                return RedirectToAction("Login", "Account");
 
-            return View();
-        }
-
-        public async Task<IActionResult> Products()
+        public async Task<IActionResult> Index()
         {
             if (HttpContext.Session.GetString("Role") != "Admin")
                 return RedirectToAction("Login", "Account");
@@ -67,11 +60,17 @@ namespace Client.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Orders()
+        public IActionResult DeleteProduct()
         {
-            AddHeader();
-            var response = await client.GetFromJsonAsync<OrderViewModel[]>("orders");
-            return View(response);
+            if (HttpContext.Session.GetString("Role") != "Admin")
+                return RedirectToAction("Login", "Account");
+            return View();
         }
+
+        // [HttpDelete]
+        // public async Task<IActionResult> DeleteProduct(ProductViewModel model)
+        // {
+        //     
+        // }
     }
 }
