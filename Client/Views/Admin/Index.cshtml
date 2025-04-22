@@ -1,0 +1,26 @@
+@{
+    ViewBag.Title = "Dashboard";
+    Layout = "_Layout";
+}
+
+<h2>Admin Dashboard</h2>
+<div class="row">
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Manage Products</h5>
+                <p>View, create, update, or disable products.</p>
+                <a asp-action="CreateProduct" class="btn btn-primary">Go to Products</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">View Orders</h5>
+                <p>View all successful orders.</p>
+                <a asp-action="Orders" class="btn btn-primary">Go to Orders</a>
+            </div>
+        </div>
+    </div>
+</div>

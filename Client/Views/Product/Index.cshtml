@@ -1,0 +1,33 @@
+@model IEnumerable<Client.Models.ProductViewModel>
+@{
+    Layout = "_Layout";
+}
+
+<h2>Product List</h2>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in Model)
+    {
+        <tr>
+            <td>@product.Name</td>
+            <td>@product.Description</td>
+            <td>@product.Price</td>
+            <td>
+                <form asp-action="AddToCart" method="post">
+                    <input type="hidden" name="productId" value="@product.Id" />
+                    <input type="number" name="quantity" value="1" min="1" />
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
