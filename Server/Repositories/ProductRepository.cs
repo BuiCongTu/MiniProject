@@ -6,7 +6,7 @@ namespace Server.Repositories
     public class ProductRepository : IProductRepository
     {
         private readonly DatabaseDbContext _context;
-
+        
         public ProductRepository(DatabaseDbContext context)
         {
             _context = context;

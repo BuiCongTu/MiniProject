@@ -11,7 +11,6 @@ namespace Server.Controllers
     {
         private readonly IProductService prodSer;
         private IWebHostEnvironment env;
-
         public ProductController(IProductService prodSer, IWebHostEnvironment env)
         {
             this.prodSer = prodSer;
@@ -45,6 +44,7 @@ namespace Server.Controllers
             {
                 return BadRequest(ModelState);
             }
+            
             var createdProduct = await prodSer.AddAsync(productDto);
             return CreatedAtAction(nameof(GetById), new { id = createdProduct.Id }, createdProduct);
         }
