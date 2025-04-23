@@ -56,7 +56,7 @@ namespace Client.Controllers
             var response = await client.PostAsJsonAsync("Product", model);
 
             if (response.IsSuccessStatusCode)
-                return RedirectToAction("Products");
+                return RedirectToAction("Index");
             return View(model);
         }
 

@@ -6,7 +6,7 @@ public class ImageController : Controller
 {
     IHttpClientFactory factory;
 
-    private const string uri = "http://localhost:5288/Image";
+    private const string uri = "http://localhost:7284/Image";
     
     //contructor
     public ImageController(IHttpClientFactory factory)
